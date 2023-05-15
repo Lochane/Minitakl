@@ -50,8 +50,8 @@ int	main(int argc, char **argv)
 	ca.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &ca, NULL);
 	sigaction(SIGUSR2, &ca, NULL);
-	// envoyer bit par bit dans une fonction tant que argv[2][i] exist
 	while (argv[2][i])
 		char_to_bin(argv[2][i++], pid);
 	char_to_bin(argv[2][i], pid);
+return (1);
 }
