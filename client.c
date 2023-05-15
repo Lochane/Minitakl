@@ -48,7 +48,6 @@ int	main(int argc, char **argv)
 	sigemptyset(&ca.sa_mask);
 	ca.sa_handler = client_sig_handler;
 	ca.sa_flags = SA_SIGINFO;
-			kill(pid, SIGUSR1);
 	sigaction(SIGUSR1, &ca, NULL);
 	sigaction(SIGUSR2, &ca, NULL);
 	// envoyer bit par bit dans une fonction tant que argv[2][i] exist
