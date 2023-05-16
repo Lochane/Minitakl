@@ -6,33 +6,41 @@
 /*   By: lsouquie <lsouquie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:34:12 by lsouquie          #+#    #+#             */
-/*   Updated: 2023/05/15 19:31:14 by lsouquie         ###   ########.fr       */
+/*   Updated: 2023/05/16 18:18:51 by lsouquie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
+
+int g_g;
 
 void	char_to_bin(char c, int pid)
 {
 	int	i;
 	int wait;
 
-	i = 8;
+	i = 7;
 	wait = 0;
 	while (i >= 0)
 	{
-		if ((c & 1) == 1)
+		if (((c >> i) & 1))
 			kill(pid, SIGUSR1);
-		else if ((c & 1) == 0)
+		else
 			kill(pid, SIGUSR2);
-		c = c << 1;
+		while (g_g == 0)
+			usleep(200);
+		g_g = 0;
 		i--;
 	}
 }
 
-void	client_sig_handler(int signum)
+void	client_sig_handler(int signum, siginfo_t *info, void *content)
 {
-	
+	(void)info;
+	(void)content;
+	(void)signum;
+	g_g = 1;
+	// if (signum == SIGUSR1)
 }
 
 int	main(int argc, char **argv)
@@ -46,7 +54,7 @@ int	main(int argc, char **argv)
 	i = 0;
 	pid = ft_atoi(argv[1]);
 	sigemptyset(&ca.sa_mask);
-	ca.sa_handler = client_sig_handler;
+	ca.sa_sigaction = client_sig_handler;
 	ca.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &ca, NULL);
 	sigaction(SIGUSR2, &ca, NULL);
