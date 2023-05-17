@@ -3,19 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lsouquie <lsouquie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lochane <lochane@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 13:20:19 by lsouquie          #+#    #+#             */
-/*   Updated: 2023/05/16 20:40:48 by lsouquie         ###   ########.fr       */
+/*   Updated: 2023/05/17 13:50:49 by lochane          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	stash_and_print(char c, char *stash)
+void	print_lst(t_list *data)
 {
-	if (c == '\0')
-		ft_printf("%s\n", stash);
+	while (data)
+	{
+		ft_printf("%c", *(char *)data->content);
+	//	ft_printf("****");
+		data = data->next;
+	}
+}
+
+void	stash(char c, t_list **lst)
+{
+	t_list *new;
+	
+	new = ft_lstnew(&c);
+	ft_lstadd_back(lst, new);
+//	if (!c)
+		print_lst(*(lst));
 }
 
 void	bin_to_char(int signum, char *c, int pid)
@@ -30,13 +44,10 @@ void	serv_sig_handler(int signum, siginfo_t *info, void *content)
 {
 	static char c;
 	static int	byte_count;
-	static int	pid;
-	static	char *stash;
-	static	int	size = 100;
-	static	int	i;
+	static int		pid;
+	static t_list *lst;
 
 	(void)content;
-	stash = ft_calloc(sizeof(char *), size);
 	pid = info->si_pid;
 	bin_to_char(signum, &c, pid);
 	byte_count++;
@@ -45,8 +56,7 @@ void	serv_sig_handler(int signum, siginfo_t *info, void *content)
 		byte_count = 0;
 		if (!c)
 			kill(pid, SIGUSR1);
-		stash[i++] = c;
-		stash_and_print(c, stash);
+		stash(c, &lst);
 		// i++;
 		c = 0;
 	}
