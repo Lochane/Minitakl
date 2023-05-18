@@ -3,33 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lochane <lochane@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lsouquie <lsouquie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 13:20:19 by lsouquie          #+#    #+#             */
-/*   Updated: 2023/05/17 13:50:49 by lochane          ###   ########.fr       */
+/*   Updated: 2023/05/18 19:00:29 by lsouquie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	print_lst(t_list *data)
-{
-	while (data)
-	{
-		ft_printf("%c", *(char *)data->content);
-	//	ft_printf("****");
-		data = data->next;
-	}
-}
+/*faire ;alloc taill liste recopier liste dans truc*/
 
-void	stash(char c, t_list **lst)
+void	stash(char c, t_lst **lst)
 {
-	t_list *new;
-	
-	new = ft_lstnew(&c);
-	ft_lstadd_back(lst, new);
-//	if (!c)
-		print_lst(*(lst));
+	t_lst	*new;
+
+	new = ft_newlst(c);
+	ft_add_back(lst, new);
+	if (!c)
+	{
+		print_lst(*lst);
+		ft_clear(lst, &free);
+	}
 }
 
 void	bin_to_char(int signum, char *c, int pid)
@@ -42,10 +37,10 @@ void	bin_to_char(int signum, char *c, int pid)
 
 void	serv_sig_handler(int signum, siginfo_t *info, void *content)
 {
-	static char c;
-	static int	byte_count;
-	static int		pid;
-	static t_list *lst;
+	static char					c;
+	static int					byte_count;
+	static int					pid;
+	static t_lst				*lst;
 
 	(void)content;
 	pid = info->si_pid;
@@ -54,10 +49,10 @@ void	serv_sig_handler(int signum, siginfo_t *info, void *content)
 	if (byte_count == 8)
 	{
 		byte_count = 0;
+
 		if (!c)
 			kill(pid, SIGUSR1);
 		stash(c, &lst);
-		// i++;
 		c = 0;
 	}
 	kill(pid, SIGUSR2);

@@ -6,7 +6,7 @@
 /*   By: lsouquie <lsouquie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:34:12 by lsouquie          #+#    #+#             */
-/*   Updated: 2023/05/16 18:18:51 by lsouquie         ###   ########.fr       */
+/*   Updated: 2023/05/18 19:00:35 by lsouquie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,37 @@
 
 int g_g;
 
+void	wait(void)
+{
+	while (g_g == 0)
+		usleep(100);
+	g_g = 0;
+}
+
 void	char_to_bin(char c, int pid)
 {
 	int	i;
-	int wait;
 
 	i = 7;
-	wait = 0;
 	while (i >= 0)
 	{
 		if (((c >> i) & 1))
-			kill(pid, SIGUSR1);
+		{
+			if (kill(pid, SIGUSR1) == -1)
+			{
+				ft_printf("Wrong PID\n");
+				exit (0);
+			}
+		}
 		else
-			kill(pid, SIGUSR2);
-		while (g_g == 0)
-			usleep(200);
-		g_g = 0;
+		{
+			if (kill(pid, SIGUSR2) == -1)
+			{
+				ft_printf("Wrong PID\n");
+				exit (0);
+			}
+		}
+		wait();
 		i--;
 	}
 }
@@ -40,7 +55,6 @@ void	client_sig_handler(int signum, siginfo_t *info, void *content)
 	(void)content;
 	(void)signum;
 	g_g = 1;
-	// if (signum == SIGUSR1)
 }
 
 int	main(int argc, char **argv)
@@ -61,5 +75,5 @@ int	main(int argc, char **argv)
 	while (argv[2][i])
 		char_to_bin(argv[2][i++], pid);
 	char_to_bin(argv[2][i], pid);
-return (1);
+	return (1);
 }

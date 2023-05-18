@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lochane <lochane@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lsouquie <lsouquie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 14:48:00 by lsouquie          #+#    #+#             */
-/*   Updated: 2023/03/05 02:12:36 by lochane          ###   ########.fr       */
+/*   Updated: 2023/05/18 16:18:40 by lsouquie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		temp->next = new;
 	}
 	else
-	*lst = new;
+		*lst = new;
 }
