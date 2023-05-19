@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize.c                                       :+:      :+:    :+:   */
+/*   utils2_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lsouquie <lsouquie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/25 14:00:14 by lsouquie          #+#    #+#             */
-/*   Updated: 2023/05/19 19:13:21 by lsouquie         ###   ########.fr       */
+/*   Created: 2023/05/19 19:12:28 by lsouquie          #+#    #+#             */
+/*   Updated: 2023/05/19 19:47:27 by lsouquie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "server_bonus.h"
 
-int	ft_lstsize(t_list *lst)
+int	ft_sizelst(t_lst *lst)
 {
 	int	size;
 

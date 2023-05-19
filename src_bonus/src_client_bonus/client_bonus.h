@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize.c                                       :+:      :+:    :+:   */
+/*   client_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lsouquie <lsouquie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/25 14:00:14 by lsouquie          #+#    #+#             */
-/*   Updated: 2023/05/19 19:13:21 by lsouquie         ###   ########.fr       */
+/*   Created: 2023/05/15 15:46:44 by lsouquie          #+#    #+#             */
+/*   Updated: 2023/05/19 19:50:46 by lsouquie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef CLIENT_BONUS_H
+# define CLIENT_BONUS_H
 
-int	ft_lstsize(t_list *lst)
-{
-	int	size;
+# include <signal.h>
+# include <unistd.h>
+# include <sys/types.h>
+# include "../../libft/libft.h"
 
-	size = 0;
-	while (lst != NULL)
-	{
-		size++;
-		lst = lst->next;
-	}
-	return (size);
-}
+void	wait(void);
+void	char_to_bin(char c, int pid);
+void	client_sig_handler(int signum, siginfo_t *info, void *content);
+void	error_msg(void);
+
+#endif

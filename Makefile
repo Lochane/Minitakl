@@ -1,44 +1,66 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
-RM = rm -rf
-HEADER = .
+CFLAGS = -Wall -Wextra -Werror
+RM = rm -f
 
-SRCDIR_S = src_server
-SRC_S = server \
-OBJ_S = $(addsuffix .o, ${SRC_S})
- 
-# SRCDIR_C = src_client
-# SRC_S = $(SRCDIR_C)/client.c \
-# OBJ_C = $(SRC_C:.c=.o)
+C_SRC_DIR = src/src_client/
+C_SRC = $(addprefix $(C_SRC_DIR), client.c)
+C_OBJ = $(C_SRC:.c=.o)
+
+S_SRC_DIR = src/src_server/
+S_SRC = $(addprefix $(S_SRC_DIR), server.c utils.c )
+S_OBJ = $(S_SRC:.c=.o)
 
 C_NAME = client
 S_NAME = serveur
 
-LIBPATH = ./libft/libft.a
+################ BONUS ##################
 
-all:	$(S_NAME) #$(C_NAME) 
+BONUS_NAMEC = client_bonus
+BONUS_NAMES = server_bonus
 
-$(S_NAME):	$(OBJ_S) | lib
-	 $(CC) $(CFLAGS) $(OBJ_S) -o $@ $(LIBPATH)
+C_SRC_DIR_BONUS = src_bonus/src_client_bonus/
+C_SRC_BONUS = $(addprefix $(C_SRC_DIR_BONUS), client_bonus.c)
+C_OBJ_BONUS = $(C_SRC_BONUS:.c=.o)
 
-# $(C_NAME):	$(OBJ_C) | lib
-# 		$(CC) $(CFLAGS) -o $@ $(OBJ_C) $(LIBPATH) 
+S_SRC_DIR_BONUS = src_bonus/src_server_bonus/
+S_SRC_BONUS = $(addprefix $(S_SRC_DIR_BONUS), server_bonus.c utils_bonus.c utils2_bonus.c)
+S_OBJ_BONUS = $(S_SRC_BONUS:.c=.o)
 
-%.o:%.c
-	$(CC) -c $(FLAGS) $< -o $@ -I${HEADER}
+#########################################
+
+LIBPATH = libft/libft.a
+
+all:	$(C_NAME) $(S_NAME)
+
+$(C_NAME):	$(C_OBJ) | lib
+		$(CC) $(CFLAGS) -o $@ $(C_OBJ) $(LIBPATH) 
+
+$(S_NAME):	$(S_OBJ) | lib
+		$(CC) $(CFLAGS) -o $@ $(S_OBJ) $(LIBPATH)
 
 lib:
 	@make -C ./libft
 
+################ BONUS ##################
+
+bonus:	$(BONUS_NAMEC) $(BONUS_NAMES)
+
+$(BONUS_NAMEC):	$(C_OBJ_BONUS) | lib
+		$(CC) $(CFLAGS) -o $@ $(C_OBJ_BONUS) $(LIBPATH) 
+
+$(BONUS_NAMES):	$(S_OBJ_BONUS) | lib
+		$(CC) $(CFLAGS_BONUS) -o $@ $(S_OBJ_BONUS) $(LIBPATH)
+
+#########################################
+
 clean:
-		$(RM) $(OBJ_C) $(OBJ_S)
+		$(RM) $(C_OBJ) $(S_OBJ) $(C_OBJ_BONUS) $(S_OBJ_BONUS)
 		@make clean -C ./libft
 
 fclean:	clean
-		$(RM) $(C_NAME) $(S_NAME)
+		$(RM) $(C_NAME) $(S_NAME) $(BONUS_NAMES) $(BONUS_NAMEC)
 		@make fclean -C ./libft
 
 re:	fclean all
 
 .PHONY: all clean fclean re
-	
